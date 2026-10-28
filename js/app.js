@@ -40,6 +40,8 @@
     const b = $("#bmCount"), c = $("#cartCount");
     b.textContent = bookmarks.length; b.hidden = !bookmarks.length;
     c.textContent = cartCount(); c.hidden = !cartCount();
+    $$("[data-bm-count]").forEach((e) => { e.textContent = bookmarks.length; e.hidden = !bookmarks.length; });
+    $$("[data-cart-count]").forEach((e) => { e.textContent = cartCount(); e.hidden = !cartCount(); });
   }
 
   /* ---------------- imagery ---------------- */
@@ -127,6 +129,8 @@
           <img src="assets/img/logo.png" alt="The Fairy Folio fairy with a star wand sitting on an open book" width="520" height="485">
         </div>
       </div></section>
+
+      <div class="marquee" aria-hidden="true"><div class="marquee-track">${[0, 1].map(() => CATS.map((c) => `<span>${esc(c.name)}</span>`).join("")).join("")}</div></div>
 
       <section class="section" id="services"><div class="container">
         <div class="section-head center"><span class="eyebrow">What we create</span><h2>Six ways we bring ideas to life</h2>
@@ -639,6 +643,7 @@
   }
   let revealIO;
   function revealAll() {
+    if (document.documentElement.classList.contains("splash-on")) return; // wait until the splash has finished
     if (!("IntersectionObserver" in window)) { $$(".reveal").forEach((e) => e.classList.add("in")); return; }
     revealIO = revealIO || new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); revealIO.unobserve(e.target); } }), { threshold: .08 });
     $$(".reveal:not(.in)").forEach((e) => revealIO.observe(e));
@@ -668,14 +673,62 @@
     const navKey = !a ? "home" : (["shop", "cart"].includes(a) ? "shop" : a);
     const cur = $(`[data-nav="${navKey}"]`); if (cur) cur.setAttribute("aria-current", "page");
     if (keepScroll === true) window.scrollTo(0, y); else { window.scrollTo(0, 0); main.focus({ preventScroll: true }); }
-    $("#mainNav").classList.remove("open"); $("#menuToggle").setAttribute("aria-expanded", "false");
+    setMenu(false);
     $("#navDd").classList.remove("open"); $("#ddBtn").setAttribute("aria-expanded", "false");
+    main.classList.remove("main-reveal"); void main.offsetWidth; main.classList.add("main-reveal");
+  }
+
+  /* ---------------- mobile menu (animated hamburger drawer) ---------------- */
+  function setMenu(open, returnFocus) {
+    const nav = $("#mainNav"), btn = $("#menuToggle"), was = nav.classList.contains("open");
+    if (open === was) return;
+    nav.classList.toggle("open", open);
+    $("#navBackdrop").classList.toggle("show", open);
+    document.documentElement.classList.toggle("nav-locked", open);
+    btn.setAttribute("aria-expanded", String(open));
+    btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    if (open) { const f = $("#mainNav > a"); if (f && window.innerWidth <= 900) setTimeout(() => f.focus({ preventScroll: true }), 120); }
+    else { $("#navDd").classList.remove("open"); $("#ddBtn").setAttribute("aria-expanded", "false"); if (returnFocus) btn.focus(); }
+  }
+
+  /* ---------------- splash screen ---------------- */
+  function initSplash() {
+    const root = document.documentElement, sp = $("#splash");
+    let done = false;
+    const finish = () => {
+      if (done) return; done = true;
+      sp.classList.add("hide"); root.classList.remove("splash-on");
+      revealAll();
+      setTimeout(() => { sp.remove(); }, 1100);
+    };
+    if (!sp) { root.classList.remove("splash-on"); return; }
+    const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    $("#splashSkip").addEventListener("click", finish);
+    sp.addEventListener("click", finish);
+    setTimeout(finish, reduce ? 900 : 3600);
+  }
+
+  /* ---------------- scroll effects ---------------- */
+  function initScroll() {
+    const header = $(".site-header"), bar = $("#scrollProgress"), top = $("#toTop");
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY, h = document.documentElement.scrollHeight - window.innerHeight;
+      header.classList.toggle("scrolled", y > 12);
+      bar.style.transform = "scaleX(" + (h > 0 ? Math.min(1, y / h) : 0) + ")";
+      top.classList.toggle("show", y > 600);
+      ticking = false;
+    };
+    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener("resize", update);
+    top.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    update();
   }
 
   /* ---------------- global wiring ---------------- */
   function wire() {
     // build nav + footer from data
-    $("#ddMenu").innerHTML = CATS.map((c) => `<a href="#/category/${c.slug}">${c.icon} ${esc(c.name)}</a>`).join("");
+    $("#ddMenu").innerHTML = `<div class="dd-inner">` + CATS.map((c) => `<a href="#/category/${c.slug}">${c.icon} ${esc(c.name)}</a>`).join("") + `</div>`;
     $("#footCats").innerHTML = CATS.map((c) => `<li><a href="#/category/${c.slug}">${esc(c.name)}</a></li>`).join("");
     $("#footContact").innerHTML = `<li>✉️ <a href="mailto:${esc(CFG.email)}">${esc(CFG.email)}</a></li>` +
       CFG.socials.map((s) => `<li><a href="${esc(s.href)}" target="_blank" rel="noopener">${esc(s.label)}</a></li>`).join("") +
@@ -684,7 +737,11 @@
 
     // dropdown + mobile menu
     $("#ddBtn").addEventListener("click", (e) => { e.stopPropagation(); const o = $("#navDd").classList.toggle("open"); e.currentTarget.setAttribute("aria-expanded", o); });
-    $("#menuToggle").addEventListener("click", () => { const o = $("#mainNav").classList.toggle("open"); $("#menuToggle").setAttribute("aria-expanded", o); });
+    $("#menuToggle").addEventListener("click", () => setMenu(!$("#mainNav").classList.contains("open")));
+    $("#navBackdrop").addEventListener("click", () => setMenu(false));
+    // tapping a link in the drawer closes it (also when the link points to the current page)
+    $("#mainNav").addEventListener("click", (e) => { if (e.target.closest("a")) setMenu(false); });
+    window.addEventListener("resize", () => { if (window.innerWidth > 900) setMenu(false); });
     document.addEventListener("click", (e) => { if (!e.target.closest("#navDd")) { $("#navDd").classList.remove("open"); $("#ddBtn").setAttribute("aria-expanded", "false"); } });
 
     // search
@@ -714,8 +771,15 @@
       if (e.key === "Escape") {
         const open = $$(".overlay.open").pop();
         if (open) closeOverlay(open); else if (chat.open) { setChat(false); $("#chatLauncher").focus(); }
-        $("#mainNav").classList.remove("open"); $("#navDd").classList.remove("open");
+        if ($("#mainNav").classList.contains("open")) setMenu(false, true);
+        $("#navDd").classList.remove("open");
       } else if (e.key === "/" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) && !$$(".overlay.open").length) { e.preventDefault(); openSearch(); }
+      else if (e.key === "Tab" && $("#mainNav").classList.contains("open") && window.innerWidth <= 900 && !$$(".overlay.open").length) {
+        const f = [$("#menuToggle"), ...$$("#mainNav a, #mainNav button")].filter((x) => x.offsetParent !== null);
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
       else if (e.key === "Tab") {
         const open = $$(".overlay.open").pop(); if (!open) return;
         const f = $$(FOCUSABLE, open).filter((x) => x.offsetParent !== null); if (!f.length) return;
@@ -736,5 +800,5 @@
   }
 
   /* ---------------- boot ---------------- */
-  document.addEventListener("DOMContentLoaded", () => { wire(); updateBadges(); route(); });
+  document.addEventListener("DOMContentLoaded", () => { wire(); updateBadges(); route(); initScroll(); initSplash(); });
 })();

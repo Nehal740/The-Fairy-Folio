@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # The Fairy Folio — Illustration Agency Website
 
 **Tagline:** Where Imagination Meets Creativity
@@ -7,6 +6,13 @@
 A portfolio-led website for The Fairy Folio, built from the SRS. It includes a home page, six category hubs, project detail pages, global search, bookmarks, a demo shop with cart, About Us, Contact, Careers/Internships and a floating chatbot.
 
 ---
+
+## 0. What's new in this version
+
+- **Splash screen** built from your logo (floating logo, sparkles, animated title, loading bar; click *Skip intro* to skip).
+- **Animated hamburger** → X, with a slide-in drawer, blurred backdrop, staggered links, Services accordion, body-scroll lock, Esc/backdrop/link to close.
+- Scroll progress bar, back-to-top button, shrinking sticky header, services marquee, refined cards, buttons and page transitions.
+- Responsive polish for phones (320px+), tablets and large desktops; all animations respect *reduced motion*.
 
 ## 1. How to open it in Visual Studio Code
 
@@ -99,7 +105,3 @@ Current Chrome, Edge, Firefox and Safari. (Uses ES2015+, CSS Grid, `Intersection
 ## 9. Suggested next steps
 
 Add real portfolio images → set email & socials → connect a form service → deploy (GitHub Pages / Netlify / Vercel: just upload the folder) → record the demo video.
-=======
-# The-Fairy-Folio
-The Fairy Folio. A professional illustration agency website showcasing children's book illustrations, character design, wedding illustrations, book cover design, editorial artwork, and digital merchandise. Featuring an interactive portfolio, global search, bookmarks, chatbot, and project enquiry system. Where Imagination Meets Creativity.
->>>>>>> 46b481ebafd167904b7f9e4cd971f39425d9417b

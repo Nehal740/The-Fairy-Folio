@@ -148,7 +148,7 @@ with sync_playwright() as p:
     allok = True
     for r in ["#/", "#/category/wedding", "#/project/bc-1", "#/shop", "#/cart", "#/bookmarks", "#/about", "#/careers", "#/contact", "#/search?q=book"]:
         pg.goto(ROOT + r); pg.wait_for_selector("main > *")
-        ok = all(pg.locator(s).count() == 1 for s in ["#searchBtn", '.header-tools a[href="#/bookmarks"]', '.main-nav a[href="#/about"]', '.main-nav a[href="#/contact"]', "#chatLauncher"])
+        ok = all(pg.locator(s).count() >= 1 for s in ["#searchBtn", '.header-tools a[href="#/bookmarks"]', '.main-nav a[href="#/about"]', '.main-nav a[href="#/contact"]', "#chatLauncher"])
         allok &= ok
         if not ok: print("  missing global on", r)
     check("Search/Bookmarks/About/Contact/Chatbot on every page", allok)
