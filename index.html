@@ -7,12 +7,38 @@
   <meta name="description" content="The Fairy Folio is a professional illustration agency: children's book illustration, character design, wedding illustration, book covers, merch and editorial work.">
   <meta name="theme-color" content="#FBEAB2">
   <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="apple-touch-icon" href="assets/img/logo-small.png">
+  <link rel="preload" as="image" href="assets/img/logo.png">
+  <meta property="og:title" content="The Fairy Folio — Where Imagination Meets Creativity">
+  <meta property="og:description" content="Professional illustration agency for authors, publishers, brands and couples worldwide.">
+  <meta property="og:image" content="assets/img/logo.png">
+  <script>document.documentElement.classList.add("js","splash-on");</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800;1,9..144,600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <!-- ============ SPLASH SCREEN ============ -->
+  <div class="splash" id="splash" role="status" aria-label="Loading The Fairy Folio">
+    <div class="splash-bg" aria-hidden="true">
+      <i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i>
+      <span class="sp s1">✦</span><span class="sp s2">✦</span><span class="sp s3">✧</span><span class="sp s4">✦</span><span class="sp s5">✧</span><span class="sp s6">✦</span>
+    </div>
+    <div class="splash-inner">
+      <div class="splash-logo">
+        <span class="ring" aria-hidden="true"></span>
+        <span class="ring r2" aria-hidden="true"></span>
+        <img src="assets/img/logo.png" alt="The Fairy Folio logo" width="260" height="242">
+      </div>
+      <div class="splash-title"><span>The</span> <span>Fairy</span> <span>Folio</span></div>
+      <p class="splash-tag">Where Imagination Meets Creativity</p>
+      <div class="splash-bar" aria-hidden="true"><i></i></div>
+      <button type="button" class="splash-skip" id="splashSkip">Skip intro</button>
+    </div>
+  </div>
+
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- ============ HEADER ============ -->
@@ -27,31 +53,41 @@
       </a>
 
       <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+        <div class="drawer-head" aria-hidden="true">
+          <img src="assets/img/logo-small.png" alt="" width="56" height="52">
+          <div><b>The Fairy Folio</b><small>Where Imagination Meets Creativity</small></div>
+        </div>
         <a href="#/" data-nav="home">Home</a>
         <div class="nav-dd" id="navDd">
-          <button type="button" aria-expanded="false" aria-haspopup="true" id="ddBtn">Services ▾</button>
+          <button type="button" aria-expanded="false" aria-haspopup="true" id="ddBtn">Services <span class="caret" aria-hidden="true">▾</span></button>
           <div class="nav-dd-menu" id="ddMenu"></div>
         </div>
         <a href="#/shop" data-nav="shop">Shop</a>
         <a href="#/about" data-nav="about">About Us</a>
         <a href="#/careers" data-nav="careers">Careers</a>
         <a href="#/contact" data-nav="contact">Contact Us</a>
+        <div class="drawer-extra">
+          <a href="#/bookmarks" class="drawer-pill">♡ Bookmarks <span class="badge-inline" data-bm-count hidden>0</span></a>
+          <a href="#/cart" class="drawer-pill">🛒 Cart <span class="badge-inline" data-cart-count hidden>0</span></a>
+        </div>
+        <a class="btn btn--primary drawer-cta" href="#/contact">Start a Project</a>
       </nav>
+      <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
 
       <div class="header-tools">
         <button class="icon-btn" id="searchBtn" type="button" aria-label="Open search" title="Search (press /)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
         </button>
-        <a class="icon-btn" href="#/bookmarks" aria-label="Bookmarks" title="Bookmarks">
+        <a class="icon-btn hide-sm" href="#/bookmarks" aria-label="Bookmarks" title="Bookmarks">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.2-9.1C1.2 8.5 3 5 6.4 5c2 0 3.5 1.1 4.3 2.5h2.6C14.1 6.1 15.6 5 17.6 5 21 5 22.8 8.5 21.2 11.9 19 16.4 12 21 12 21z"/></svg>
           <span class="badge-count" id="bmCount" hidden>0</span>
         </a>
-        <a class="icon-btn" href="#/cart" aria-label="Shopping cart" title="Cart">
+        <a class="icon-btn hide-sm" href="#/cart" aria-label="Shopping cart" title="Cart">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.4a2 2 0 002-1.5L20.5 8H6"/><circle cx="10" cy="20.5" r="1.4"/><circle cx="17" cy="20.5" r="1.4"/></svg>
           <span class="badge-count" id="cartCount" hidden>0</span>
         </a>
         <button class="icon-btn menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span>
         </button>
       </div>
     </div>
@@ -94,7 +130,7 @@
       </div>
       <div class="footer-bottom">
         <span>© <span id="yr"></span> The Fairy Folio. All artwork © its creators.</span>
-        <span>Sample content &amp; demo shop — see README.</span>
+        <span>Made with ✦ for storytellers everywhere.</span>
       </div>
     </div>
   </footer>
@@ -141,6 +177,8 @@
       <button class="btn btn--primary btn--sm" type="submit">Send</button>
     </form>
   </section>
+
+  <button type="button" class="to-top" id="toTop" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
