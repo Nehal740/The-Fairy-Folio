@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # The Fairy Folio — Illustration Agency Website
 
 **Tagline:** Where Imagination Meets Creativity
@@ -98,3 +99,7 @@ Current Chrome, Edge, Firefox and Safari. (Uses ES2015+, CSS Grid, `Intersection
 ## 9. Suggested next steps
 
 Add real portfolio images → set email & socials → connect a form service → deploy (GitHub Pages / Netlify / Vercel: just upload the folder) → record the demo video.
+=======
+# The-Fairy-Folio
+The Fairy Folio. A professional illustration agency website showcasing children's book illustrations, character design, wedding illustrations, book cover design, editorial artwork, and digital merchandise. Featuring an interactive portfolio, global search, bookmarks, chatbot, and project enquiry system. Where Imagination Meets Creativity.
+>>>>>>> 46b481ebafd167904b7f9e4cd971f39425d9417b
