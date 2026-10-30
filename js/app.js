@@ -730,10 +730,39 @@
     // build nav + footer from data
     $("#ddMenu").innerHTML = `<div class="dd-inner">` + CATS.map((c) => `<a href="#/category/${c.slug}">${c.icon} ${esc(c.name)}</a>`).join("") + `</div>`;
     $("#footCats").innerHTML = CATS.map((c) => `<li><a href="#/category/${c.slug}">${esc(c.name)}</a></li>`).join("");
-    $("#footContact").innerHTML = `<li>✉️ <a href="mailto:${esc(CFG.email)}">${esc(CFG.email)}</a></li>` +
-      CFG.socials.map((s) => `<li><a href="${esc(s.href)}" target="_blank" rel="noopener">${esc(s.label)}</a></li>`).join("") +
-      `<li><a href="#/contact">Project enquiry form</a></li>`;
-    $("#yr").textContent = new Date().getFullYear();
+    const socialLinks = CFG.socials.map((s) =>
+  `<a href="${esc(s.href)}" target="_blank" rel="noopener" aria-label="${esc(s.label)}" style="display:inline-flex; align-items:center; gap:5px; margin-left:12px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="5"/>
+      <circle cx="12" cy="12" r="4"/>
+      <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/>
+    </svg>
+    ${esc(s.label)}
+  </a>`
+).join("");
+
+
+$("#footContact").innerHTML =
+  `<li style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+    <span style="width:22px; min-width:22px; display:inline-flex; justify-content:center; align-items:center;">✉</span>
+    <a href="mailto:${esc(CFG.email)}">${esc(CFG.email)}</a>
+  </li>` +
+  CFG.socials.map((s) => `
+    <li style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+      <span style="width:22px; min-width:22px; display:inline-flex; justify-content:center; align-items:center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/>
+        </svg>
+      </span>
+      <a href="${esc(s.href)}" target="_blank" rel="noopener">${esc(s.label)}</a>
+    </li>
+  `).join("") +
+  `<li style="margin-top:8px;">
+    <a href="#/contact">Project enquiry form</a>
+  </li>`;
+
 
     // dropdown + mobile menu
     $("#ddBtn").addEventListener("click", (e) => { e.stopPropagation(); const o = $("#navDd").classList.toggle("open"); e.currentTarget.setAttribute("aria-expanded", o); });
@@ -802,3 +831,6 @@
   /* ---------------- boot ---------------- */
   document.addEventListener("DOMContentLoaded", () => { wire(); updateBadges(); route(); initScroll(); initSplash(); });
 })();
+
+
+
