@@ -21,16 +21,14 @@ window.FF_CONFIG = {
   tagline: "Where Imagination Meets Creativity",
 
   // TODO: replace with the agency's real, approved email address.
-  email: "thefairyfolio@gmail.com",
+  email: "hello@example.com",
 
   // Optional: paste a form-service URL (e.g. Formspree "https://formspree.io/f/xxxx").
   // While empty, forms are clearly labelled as NOT sent and offer an email fallback.
   formEndpoint: "",
 
   // Add approved links only, e.g. { label: "Instagram", href: "https://instagram.com/..." }
-  socials: [
-  { label: "Instagram", href: "https://www.instagram.com/thefairyfolio/" }
-],
+  socials: [],
 
   currency: "$"
 };
